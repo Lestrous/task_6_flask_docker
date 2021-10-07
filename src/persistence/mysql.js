@@ -37,8 +37,13 @@ async function init() {
             err => {
                 if (err) return rej(err);
 
-                pool.query('case when (select count(*) from counter_items) = 0 then ' +
-                    '(INSERT INTO counter_items (id, name, completed) VALUES (?, ?, ?)) end', [1, 1, 0]);
+                pool.query('SELECT count(*) FROM counter_items', (err, rows) => {
+                    if (err) return rej(err);
+
+                    if ( rows[0] == 0 ) {
+                        pool.query('INSERT INTO counter_items (id, name, completed) VALUES (?, ?, ?)', [1, 1, 0]);
+                    }
+                });
 
                 console.log(`Connected to mysql db at host ${HOST}`);
                 acc();
