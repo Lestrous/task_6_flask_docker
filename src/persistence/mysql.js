@@ -40,8 +40,6 @@ async function init() {
                 pool.query('SELECT count(*) as amount FROM counter_items', (err, rows) => {
                     if (err) return rej(err);
 
-                    console.log(rows);
-
                     if ( rows[0]['amount'] == 0 ) {
                         pool.query('INSERT INTO counter_items (id, name, completed) VALUES (?, ?, ?)', [1, 1, 0]);
                     }
